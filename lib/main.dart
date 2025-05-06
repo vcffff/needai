@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:needai/presentation/screens/firstpage/firstpage.dart';
+import 'package:needai/presentation/screens/firstpage.dart';
 
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
