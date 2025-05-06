@@ -1,0 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
+//colors
+final maincolor = Color.fromRGBO(61, 92, 255, 100);
+final buttoncolor = Color.fromRGBO(255, 105, 5, 100);
+final lighttext = Color.fromRGBO(255, 255, 255, 1);
+final boxcolor = Color.fromRGBO(206, 236, 254, 100);
+final circlecolor = Color.fromRGBO(112, 112, 112, 100);
