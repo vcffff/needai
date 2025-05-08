@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:needai/presentation/screens/courses/buttonGroup.dart';
+import 'package:needai/presentation/screens/courses/oneCourse.dart';
 import 'dart:ui';
 
 import 'package:needai/presentation/screens/courses/searchFill.dart';
@@ -40,16 +40,32 @@ class _CourseState extends State<Course> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            searchBar(),
-            const SizedBox(height: 12),
-            SizedBox(height: 180, child: listView()),
-            const SizedBox(height: 12),
-            ButtonGroup(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              searchBar(),
+              const SizedBox(height: 12),
+              SizedBox(height: 180, child: listView()),
+              const SizedBox(height: 12),
+              ButtonGroup(),
+              listViewCourse(),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget listViewCourse() {
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: onecourses.length,
+      itemBuilder: (context, index) {
+        return OneCourse(onecourse: onecourses[index]);
+      },
     );
   }
 
@@ -86,6 +102,55 @@ class _CourseState extends State<Course> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ButtonGroup extends StatefulWidget {
+  @override
+  _ButtonGroupState createState() => _ButtonGroupState();
+}
+
+class _ButtonGroupState extends State<ButtonGroup> {
+  int selectedIndex = 0;
+
+  final List<String> buttons = ["All", "New", "Popular"];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 13.0),
+          child: Text(
+            'Choice your course',
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
+            textAlign: TextAlign.left,
+          ),
+        ),
+        Row(
+          children: List.generate(buttons.length, (index) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 13.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      selectedIndex == index ? Colors.blue : Colors.white,
+                  foregroundColor:
+                      selectedIndex == index ? Colors.white : Colors.black,
+                ),
+                child: Text(buttons[index]),
+              ),
+            );
+          }),
+        ),
+      ],
     );
   }
 }

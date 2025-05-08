@@ -59,7 +59,6 @@ class _FirstpageState extends State<Firstpage>
           ),
         ),
       ),
-      bottomNavigationBar: BottomBar(),
     );
   }
 }
