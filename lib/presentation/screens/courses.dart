@@ -43,9 +43,10 @@ class _CourseState extends State<Course> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 10),
               searchBar(),
               const SizedBox(height: 12),
-              SizedBox(height: 180, child: listView()),
+              SizedBox(height: 100, child: listView()),
               const SizedBox(height: 12),
               ButtonGroup(),
               listViewCourse(),
@@ -97,11 +98,225 @@ class _CourseState extends State<Course> {
           ),
           prefixIcon: const Icon(Icons.search, color: Colors.grey),
           suffixIcon: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return SizedBox(
+                    height: 500,
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.close),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              'Search Filter',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [CategoryChooser(), hoursChoose()],
+                          ),
+                          SizedBox(height: 70),
+                          buttons(),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
             icon: const Icon(Icons.tune, color: Colors.grey),
           ),
         ),
       ),
+    );
+  }
+}
+
+Widget buttons() {
+  return Row(
+    children: [
+      Expanded(
+        flex: 2,
+        child: Container(
+          height: 80,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+          child: FilledButton(
+            onPressed: () {},
+            child: Text('Clear'),
+            style: FilledButton.styleFrom(
+              foregroundColor: Colors.blue,
+
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ),
+      SizedBox(width: 14),
+      Expanded(
+        flex: 4,
+        child: Container(
+          height: 80,
+          child: FilledButton(
+            onPressed: () {},
+            child: Text('Apply Filters'),
+            style: FilledButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+class CategoryChooser extends StatefulWidget {
+  const CategoryChooser({super.key});
+
+  @override
+  State<CategoryChooser> createState() => _CategoryChooserState();
+}
+
+class _CategoryChooserState extends State<CategoryChooser> {
+  final List<String> categories = [
+    'Design',
+    'Pointing',
+    'Coding',
+    'Music',
+    'Visual Identity',
+    'Mathematics',
+  ];
+  String? selectedCategory;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Categories',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+          children:
+              categories.map((category) {
+                return ChoiceChip(
+                  label: Text(category),
+                  selected: selectedCategory == category,
+                  onSelected: (selected) {
+                    setState(() {
+                      selectedCategory = selected ? category : null;
+                    });
+                  },
+                  selectedColor: Colors.blue.withOpacity(0.2),
+                  labelStyle: TextStyle(
+                    color:
+                        selectedCategory == category
+                            ? Colors.blue
+                            : Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                      color:
+                          selectedCategory == category
+                              ? Colors.blue
+                              : Colors.grey.shade300,
+                    ),
+                  ),
+                );
+              }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+class hoursChoose extends StatefulWidget {
+  const hoursChoose({super.key});
+
+  @override
+  State<hoursChoose> createState() => _hoursChooseState();
+}
+
+class _hoursChooseState extends State<hoursChoose> {
+  @override
+  final List<String> hours = [
+    '3-8 hours',
+    '8-12 hours',
+    '12-15 hours',
+    '15-19 hours',
+  ];
+  final List<String> selectedHours = [];
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 15),
+        Text(
+          'Hours',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+        ),
+        SizedBox(height: 15),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+          children:
+              hours.map((hour) {
+                return ChoiceChip(
+                  label: Text(hour),
+                  selected: selectedHours.contains(hour),
+                  onSelected: (selected) {
+                    setState(() {
+                      if (selected) {
+                        selectedHours.add(hour);
+                      } else {
+                        selectedHours.remove(hour);
+                      }
+                    });
+                  },
+                  selectedColor: Colors.blue[400],
+                  labelStyle: TextStyle(
+                    color:
+                        selectedHours.contains(hour)
+                            ? Colors.white
+                            : Colors.black,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                );
+              }).toList(),
+        ),
+      ],
     );
   }
 }
