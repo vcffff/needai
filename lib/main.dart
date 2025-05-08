@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:needai/presentation/screens/courses.dart';
 import 'package:needai/presentation/screens/firstpage.dart';
 
 import 'firebase_options.dart';
@@ -23,7 +24,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Firstpage(),
+      home: Course(),
       theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
     );
   }

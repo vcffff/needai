@@ -1,6 +1,8 @@
+import 'dart:ui';
+
 class SearchFill {
   String? title;
   String? image;
-  final color;
-  SearchFill({required this.title, required this.image, required this.color});
+  final Color colour;
+  SearchFill({required this.title, required this.image, required this.colour});
 }
