@@ -14,11 +14,28 @@ class Course extends StatefulWidget {
 
 class _CourseState extends State<Course> {
   final searchBarController = TextEditingController();
-
+  List<oneCourse> displayedCourses = [];
   @override
+  void initState() {
+    super.initState();
+    displayedCourses = List.from(originalCourses);
+  }
+
   void dispose() {
     searchBarController.dispose();
     super.dispose();
+  }
+
+  void searchCourse(String searchBarController) {
+    final suggestions =
+        originalCourses.where((onecourse) {
+          final onecourseTitle = onecourse.title!.toLowerCase();
+          final input = searchBarController.toLowerCase();
+          return onecourseTitle.contains(input);
+        }).toList();
+    setState(() {
+      displayedCourses = suggestions.isEmpty ? originalCourses : suggestions;
+    });
   }
 
   @override
@@ -63,9 +80,9 @@ class _CourseState extends State<Course> {
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: onecourses.length,
+      itemCount: displayedCourses.length,
       itemBuilder: (context, index) {
-        return OneCourse(onecourse: onecourses[index]);
+        return OneCourse(onecourse: displayedCourses[index]);
       },
     );
   }
@@ -86,6 +103,7 @@ class _CourseState extends State<Course> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
         controller: searchBarController,
+        onChanged: searchCourse,
         decoration: InputDecoration(
           hintText: "Search",
           hintStyle: const TextStyle(color: Colors.grey),
@@ -97,6 +115,7 @@ class _CourseState extends State<Course> {
             borderSide: BorderSide.none,
           ),
           prefixIcon: const Icon(Icons.search, color: Colors.grey),
+
           suffixIcon: IconButton(
             onPressed: () {
               showModalBottomSheet(

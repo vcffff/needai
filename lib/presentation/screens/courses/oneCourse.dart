@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class oneCourse {
-  final String? title;
-  final int? hours;
+  String? title;
+  int? hours;
 
   oneCourse({required this.title, required this.hours});
 }
 
-final List<oneCourse> onecourses = [
+List<oneCourse> originalCourses = [
   oneCourse(title: 'Physics', hours: 18),
   oneCourse(title: 'Math', hours: 20),
   oneCourse(title: 'English', hours: 15),
