@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:needai/data/services/services.dart';
 import 'package:needai/presentation/screens/courses/oneCourse.dart';
-import 'dart:ui';
-
+import 'package:needai/presentation/screens/courses/popUpFilter.dart';
 import 'package:needai/presentation/screens/courses/searchFill.dart';
 
 class Course extends StatefulWidget {
@@ -15,27 +15,41 @@ class Course extends StatefulWidget {
 class _CourseState extends State<Course> {
   final searchBarController = TextEditingController();
   List<oneCourse> displayedCourses = [];
+  String selectedCategory = 'All';
+
   @override
   void initState() {
     super.initState();
     displayedCourses = List.from(originalCourses);
   }
 
+  @override
   void dispose() {
     searchBarController.dispose();
     super.dispose();
   }
 
-  void searchCourse(String searchBarController) {
+  void searchCourse(String searchInput) {
     final suggestions =
         originalCourses.where((onecourse) {
           final onecourseTitle = onecourse.title!.toLowerCase();
-          final input = searchBarController.toLowerCase();
-          return onecourseTitle.contains(input);
+          final onecourseType = onecourse.type!.toLowerCase();
+          final input = searchInput.toLowerCase();
+          return onecourseTitle.contains(input) &&
+              (selectedCategory == 'All' ||
+                  onecourseType.contains(selectedCategory.toLowerCase()));
         }).toList();
+
     setState(() {
       displayedCourses = suggestions.isEmpty ? originalCourses : suggestions;
     });
+  }
+
+  void updateSelectedCategory(String newCategory) {
+    setState(() {
+      selectedCategory = newCategory;
+    });
+    searchCourse(searchBarController.text);
   }
 
   @override
@@ -65,7 +79,7 @@ class _CourseState extends State<Course> {
               const SizedBox(height: 12),
               SizedBox(height: 100, child: listView()),
               const SizedBox(height: 12),
-              ButtonGroup(),
+              ButtonGroup(onCategorySelected: updateSelectedCategory),
               listViewCourse(),
             ],
           ),
@@ -115,8 +129,8 @@ class _CourseState extends State<Course> {
             borderSide: BorderSide.none,
           ),
           prefixIcon: const Icon(Icons.search, color: Colors.grey),
-
           suffixIcon: IconButton(
+            icon: Icon(Icons.tune, color: Colors.grey),
             onPressed: () {
               showModalBottomSheet(
                 isScrollControlled: true,
@@ -147,12 +161,10 @@ class _CourseState extends State<Course> {
                               ),
                             ),
                           ),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [CategoryChooser(), hoursChoose()],
-                          ),
-                          SizedBox(height: 70),
+                          CategoryChooser(),
+                          SizedBox(height: 20),
+                          hoursChoose(),
+                          SizedBox(height: 60),
                           buttons(),
                         ],
                       ),
@@ -161,186 +173,18 @@ class _CourseState extends State<Course> {
                 },
               );
             },
-            icon: const Icon(Icons.tune, color: Colors.grey),
           ),
         ),
       ),
-    );
-  }
-}
-
-Widget buttons() {
-  return Row(
-    children: [
-      Expanded(
-        flex: 2,
-        child: Container(
-          height: 80,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-          child: FilledButton(
-            onPressed: () {},
-            child: Text('Clear'),
-            style: FilledButton.styleFrom(
-              foregroundColor: Colors.blue,
-
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-      ),
-      SizedBox(width: 14),
-      Expanded(
-        flex: 4,
-        child: Container(
-          height: 80,
-          child: FilledButton(
-            onPressed: () {},
-            child: Text('Apply Filters'),
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
-class CategoryChooser extends StatefulWidget {
-  const CategoryChooser({super.key});
-
-  @override
-  State<CategoryChooser> createState() => _CategoryChooserState();
-}
-
-class _CategoryChooserState extends State<CategoryChooser> {
-  final List<String> categories = [
-    'Design',
-    'Pointing',
-    'Coding',
-    'Music',
-    'Visual Identity',
-    'Mathematics',
-  ];
-  String? selectedCategory;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Categories',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 8.0,
-          children:
-              categories.map((category) {
-                return ChoiceChip(
-                  label: Text(category),
-                  selected: selectedCategory == category,
-                  onSelected: (selected) {
-                    setState(() {
-                      selectedCategory = selected ? category : null;
-                    });
-                  },
-                  selectedColor: Colors.blue.withOpacity(0.2),
-                  labelStyle: TextStyle(
-                    color:
-                        selectedCategory == category
-                            ? Colors.blue
-                            : Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(
-                      color:
-                          selectedCategory == category
-                              ? Colors.blue
-                              : Colors.grey.shade300,
-                    ),
-                  ),
-                );
-              }).toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class hoursChoose extends StatefulWidget {
-  const hoursChoose({super.key});
-
-  @override
-  State<hoursChoose> createState() => _hoursChooseState();
-}
-
-class _hoursChooseState extends State<hoursChoose> {
-  @override
-  final List<String> hours = [
-    '3-8 hours',
-    '8-12 hours',
-    '12-15 hours',
-    '15-19 hours',
-  ];
-  final List<String> selectedHours = [];
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 15),
-        Text(
-          'Hours',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-        ),
-        SizedBox(height: 15),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 8.0,
-          children:
-              hours.map((hour) {
-                return ChoiceChip(
-                  label: Text(hour),
-                  selected: selectedHours.contains(hour),
-                  onSelected: (selected) {
-                    setState(() {
-                      if (selected) {
-                        selectedHours.add(hour);
-                      } else {
-                        selectedHours.remove(hour);
-                      }
-                    });
-                  },
-                  selectedColor: Colors.blue[400],
-                  labelStyle: TextStyle(
-                    color:
-                        selectedHours.contains(hour)
-                            ? Colors.white
-                            : Colors.black,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                );
-              }).toList(),
-        ),
-      ],
     );
   }
 }
 
 class ButtonGroup extends StatefulWidget {
+  final Function(String) onCategorySelected;
+
+  const ButtonGroup({required this.onCategorySelected, super.key});
+
   @override
   _ButtonGroupState createState() => _ButtonGroupState();
 }
@@ -349,6 +193,7 @@ class _ButtonGroupState extends State<ButtonGroup> {
   int selectedIndex = 0;
 
   final List<String> buttons = ["All", "New", "Popular"];
+  String selected = 'All';
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +203,7 @@ class _ButtonGroupState extends State<ButtonGroup> {
         Padding(
           padding: const EdgeInsets.only(left: 13.0),
           child: Text(
-            'Choice your course',
+            'Choose your course',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
             textAlign: TextAlign.left,
           ),
@@ -371,7 +216,9 @@ class _ButtonGroupState extends State<ButtonGroup> {
                 onPressed: () {
                   setState(() {
                     selectedIndex = index;
+                    selected = buttons[index];
                   });
+                  widget.onCategorySelected(selected);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:

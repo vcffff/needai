@@ -1,3 +1,5 @@
+library buttonGroup;
+
 import 'package:flutter/material.dart';
 
 class ButtonGroup extends StatefulWidget {
@@ -7,7 +9,7 @@ class ButtonGroup extends StatefulWidget {
 
 class _ButtonGroupState extends State<ButtonGroup> {
   int selectedIndex = 0;
-
+  String selected = '';
   final List<String> buttons = ["All", "New", "Popular"];
 
   @override
@@ -32,6 +34,7 @@ class _ButtonGroupState extends State<ButtonGroup> {
                 onPressed: () {
                   setState(() {
                     selectedIndex = index;
+                    selected = buttons[selectedIndex];
                   });
                 },
                 style: FilledButton.styleFrom(
