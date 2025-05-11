@@ -1,14 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:needai/presentation/screens/firstpage/elements/bottom_bar.dart';
 
-import 'package:needai/presentation/screens/firstpage/pages/bottom_bar.dart';
-import 'package:needai/presentation/screens/firstpage/pages/footer.dart';
-import 'package:needai/presentation/screens/firstpage/pages/header.dart';
-import 'package:needai/presentation/screens/firstpage/pages/justrow.dart';
-import 'package:needai/presentation/screens/firstpage/pages/learning.dart';
-import 'package:needai/presentation/screens/firstpage/pages/list.dart';
-import 'package:needai/presentation/screens/firstpage/pages/settings_animation.dart';
-import 'package:needai/presentation/screens/firstpage/pages/white_card.dart';
+import 'package:needai/presentation/screens/firstpage/elements/footer.dart';
+import 'package:needai/presentation/screens/firstpage/elements/header.dart';
+import 'package:needai/presentation/screens/firstpage/elements/justrow.dart';
+import 'package:needai/presentation/screens/firstpage/elements/learning.dart';
+import 'package:needai/presentation/screens/firstpage/elements/list.dart';
+import 'package:needai/presentation/screens/firstpage/elements/settings_animation.dart';
+import 'package:needai/presentation/screens/firstpage/elements/white_card.dart'
+    show WhiteCard;
 
 class Firstpage extends StatefulWidget {
   const Firstpage({super.key});
@@ -36,6 +36,13 @@ class _FirstpageState extends State<Firstpage>
     super.dispose();
   }
 
+  int currentpage = 0;
+  void onchanged(int index) {
+    setState(() {
+      currentpage = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +66,6 @@ class _FirstpageState extends State<Firstpage>
           ),
         ),
       ),
-      bottomNavigationBar: BottomBar(),
     );
   }
 }
