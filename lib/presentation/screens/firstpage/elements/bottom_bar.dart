@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:needai/presentation/screens/firstpage.dart';
+
 class BottomBar extends StatelessWidget {
   final int currentPage;
   final ValueChanged<int> onChanged;

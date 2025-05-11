@@ -11,7 +11,6 @@ Widget buttons() {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
           child: FilledButton(
             onPressed: () {},
-            child: Text('Clear'),
             style: FilledButton.styleFrom(
               foregroundColor: Colors.blue,
 
@@ -20,17 +19,17 @@ Widget buttons() {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            child: Text('Clear'),
           ),
         ),
       ),
       SizedBox(width: 14),
       Expanded(
         flex: 4,
-        child: Container(
+        child: SizedBox(
           height: 80,
           child: FilledButton(
             onPressed: () {},
-            child: Text('Apply Filters'),
             style: FilledButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
@@ -38,6 +37,7 @@ Widget buttons() {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            child: Text('Apply Filters'),
           ),
         ),
       ),
@@ -60,6 +60,8 @@ class _CategoryChooserState extends State<CategoryChooser> {
     'Music',
     'Visual Identity',
     'Mathematics',
+    "Biology",
+    "Chemistry",
   ];
   String? selectedCategory;
 
@@ -127,6 +129,7 @@ class _hoursChooseState extends State<hoursChoose> {
     '15-19 hours',
   ];
   final List<String> selectedHours = [];
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

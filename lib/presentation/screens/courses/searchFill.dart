@@ -20,6 +20,11 @@ final List<SearchFill> searches = [
     image: 'assets/images/Vector.png',
     colour: const Color.fromRGBO(239, 224, 255, 1),
   ),
+  SearchFill(
+    title: "Biology",
+    image: "assets/images/Vector-1.png",
+    colour: const Color.fromARGB(255, 68, 134, 70),
+  ),
 ];
 
 class SearchFillContainer extends StatelessWidget {

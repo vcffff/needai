@@ -3,11 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:needai/presentation/screens/courses.dart';
 import 'package:needai/presentation/screens/firstpage.dart';
-<<<<<<< HEAD
-import 'package:needai/presentation/screens/second.dart';
-=======
-import 'package:needai/presentation/screens/firstpage/pages/bottom_bar.dart';
->>>>>>> e1fd56862298340cf1ba6e813877214dbf432652
+import 'package:needai/presentation/screens/second_page.dart';
+import 'package:needai/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
@@ -24,28 +22,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-<<<<<<< HEAD
-      home: MainPage(),
-=======
->>>>>>> e1fd56862298340cf1ba6e813877214dbf432652
-      theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
-      home: Scaffold(
-        body: ValueListenableBuilder<int>(
-          valueListenable: pageIndexNotifier,
-          builder: (context, pageIndex, _) {
-            switch (pageIndex) {
-              case 0:
-                return const Firstpage();
-              case 1:
-                return const Course();
-              default:
-                return const Firstpage();
-            }
-          },
-        ),
-        bottomNavigationBar: const BottomBar(),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AddToFavourites())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+
+        theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
+        home: MainPage(),
       ),
     );
   }
@@ -70,7 +53,7 @@ class _MainPageState extends State<MainPage> {
     // Header Section
     Firstpage(),
     // White Card Section
-    Secondpage(),
+    SecondPage(),
 
     //list of lessons
     Course(),
@@ -97,10 +80,7 @@ class _MainPageState extends State<MainPage> {
           ),
           BottomNavigationBarItem(
             label: 'Message',
-            icon: Icon(
-              CupertinoIcons.conversation_bubble,
-              color: Colors.blueAccent,
-            ),
+            icon: Icon(CupertinoIcons.heart_fill, color: Colors.blueAccent),
           ),
           BottomNavigationBarItem(
             label: 'Profile',

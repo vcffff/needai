@@ -167,7 +167,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_inappwebview:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_inappwebview
       sha256: "80092d13d3e29b6227e25b67973c67c7210bd5e35c4b747ca908e31eb71a46d5"
@@ -613,6 +613,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  webview_flutter:
+    dependency: transitive
+    description:
+      name: webview_flutter
+      sha256: caf0f5a1012aa3c2d33c4215adc72dc1194bb59a2d3ed901f457965626805e66
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.11.0"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: "6b0eae02b7604954b80ee9a29507ac38f5de74b712faa6fee33abc1cdedc1b21"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.2"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: "18b1640839cf6546784a524c72aded5b6e86b23e7167dc2311cc96f7658b64bd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.11.0"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: c9f9be526fa0d3347374ceaa05c4b3acb85f4f112abd62f7d74b7d301fa515ff
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.20.0"
   xdg_directories:
     dependency: transitive
     description:
@@ -621,16 +653,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-<<<<<<< HEAD
-  youtube_player_flutter:
-    dependency: "direct main"
-    description:
-      name: youtube_player_flutter
-      sha256: "4d14aa47f9c84929b5400a87ade4dcfdab87a2ca2e0b18ecc2ef852b1440e123"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.1.1"
-=======
   xml:
     dependency: transitive
     description:
@@ -639,7 +661,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.5.0"
->>>>>>> e1fd56862298340cf1ba6e813877214dbf432652
+  youtube_player_iframe:
+    dependency: "direct main"
+    description:
+      name: youtube_player_iframe
+      sha256: "66020f7756accfb22b3297565d845f9bef14249c730dd51e1ec648fa155fb24a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
+  youtube_player_iframe_web:
+    dependency: transitive
+    description:
+      name: youtube_player_iframe_web
+      sha256: "05222a228937932e7ee7a6171e8020fee4cd23d1c7bf6b4128c569484338c593"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
 sdks:
   dart: ">=3.7.2 <4.0.0"
   flutter: ">=3.27.0"

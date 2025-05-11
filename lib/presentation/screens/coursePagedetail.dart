@@ -86,7 +86,9 @@ class _CoursePageState extends State<CoursePage> {
                   ),
                   minimumSize: Size(double.infinity, 100),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  
+                },
                 child: Icon(Icons.star_outline_rounded, size: 60),
               ),
             ),

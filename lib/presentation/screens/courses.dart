@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:needai/data/services/services.dart';
@@ -128,7 +129,7 @@ class _CourseState extends State<Course> {
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
           ),
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          prefixIcon: const Icon(CupertinoIcons.search, color: Colors.grey),
           suffixIcon: IconButton(
             icon: Icon(Icons.tune, color: Colors.grey),
             onPressed: () {

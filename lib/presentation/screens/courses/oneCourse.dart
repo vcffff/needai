@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:needai/data/services/services.dart';
-import 'package:needai/presentation/screens/coursePage.dart';
+import 'package:needai/presentation/screens/coursePagedetail.dart';
 
 class OneCourse extends StatelessWidget {
   final oneCourse onecourse;
