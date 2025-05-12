@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:needai/presentation/screens/courses.dart';
+import 'package:needai/presentation/screens/favourites.dart';
 import 'package:needai/presentation/screens/firstpage.dart';
 import 'package:needai/presentation/screens/second_page.dart';
 import 'package:needai/providers/user_provider.dart';
@@ -55,8 +56,11 @@ class _MainPageState extends State<MainPage> {
     // White Card Section
     SecondPage(),
 
-    //list of lessons
+    //list of cources
     Course(),
+
+    //favourites
+    FavoritesPage(),
   ];
   @override
   Widget build(BuildContext context) {

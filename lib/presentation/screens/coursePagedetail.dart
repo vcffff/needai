@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:needai/data/services/services.dart';
+import 'package:needai/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class CoursePage extends StatefulWidget {
   final oneCourse onecourse;
@@ -87,29 +89,33 @@ class _CoursePageState extends State<CoursePage> {
                   minimumSize: Size(double.infinity, 100),
                 ),
                 onPressed: () {
-                  
-                },
-                child: Icon(Icons.star_outline_rounded, size: 60),
-              ),
+  final favProvider = Provider.of<AddToFavourites>(context, listen: false);
+  final isFav = favProvider.isFavourite(widget.onecourse);
+
+  if (isFav) {
+    favProvider.removeFromFav(widget.onecourse);
+  } else {
+    favProvider.addToFav(widget.onecourse);
+  }
+
+  setState(() {}); 
+},
+child: Consumer<AddToFavourites>(
+  builder: (context, favProvider, _) {
+    final isFav = favProvider.isFavourite(widget.onecourse);
+    return Icon(
+      isFav ? Icons.star_rounded : Icons.star_outline_rounded,
+      size: 60,
+      color: isFav ? Colors.amber : Colors.grey,
+    );
+  },
+),
+
             ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 3,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: Colors.blue[700],
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  minimumSize: Size(double.infinity, 100),
-                ),
-                onPressed: () {},
-                child: Text('Start Course!'),
-              ),
-            ),
-          ],
-        ),
+          
+      ),
+          ]
+        )
       ),
     );
   }

@@ -29,7 +29,7 @@ class CourseVideo {
 
 List<oneCourse> originalCourses = [
   oneCourse(
-    title: 'Physics',
+   title: 'Physics',
     hours: 18,
     type: 'New',
     courseVideos: [

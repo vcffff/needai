@@ -5,7 +5,7 @@ import 'package:needai/presentation/screens/coursePagedetail.dart';
 class OneCourse extends StatelessWidget {
   final oneCourse onecourse;
 
-  const OneCourse({super.key, required this.onecourse});
+ OneCourse({super.key, required this.onecourse});
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -13,7 +13,7 @@ class OneCourse extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CoursePage(onecourse: onecourse),
+            builder: (context) => CoursePage(onecourse:onecourse ,),
           ),
         );
       },

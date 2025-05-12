@@ -15,6 +15,7 @@ class _SecondPageState extends State<SecondPage> {
     int currentpage = 0;
 
     return Scaffold(
+      appBar: AppBar(title: Text('Videos'), centerTitle: true),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('videos').snapshots(),
         builder: (context, snapshot) {
@@ -30,7 +31,8 @@ class _SecondPageState extends State<SecondPage> {
               crossAxisCount: 2,
 
               mainAxisSpacing: 10,
-              childAspectRatio: 0.75,
+              crossAxisSpacing: 20,
+              childAspectRatio: 1.3,
             ),
             scrollDirection: Axis.vertical,
             itemCount: docs.length,
@@ -49,12 +51,18 @@ class _SecondPageState extends State<SecondPage> {
                 ),
               );
 
-              return Container(
-                height: 200,
-                width: 100,
-                decoration: BoxDecoration(),
-                padding: const EdgeInsets.all(8.0),
-                child: YoutubePlayer(controller: controller),
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(40),
+                child: Container(
+                  height: 50,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(child: YoutubePlayer(controller: controller)),
+                ),
               );
             },
           );
