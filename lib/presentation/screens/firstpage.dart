@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-
 import 'package:needai/presentation/screens/firstpage/elements/footer.dart';
 import 'package:needai/presentation/screens/firstpage/elements/header.dart';
 import 'package:needai/presentation/screens/firstpage/elements/justrow.dart';

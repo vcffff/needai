@@ -12,7 +12,7 @@ class SecondPage extends StatefulWidget {
 class _SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
-    int currentpage = 0;
+
 
     return Scaffold(
       appBar: AppBar(title: Text('Videos'), centerTitle: true),
@@ -25,46 +25,54 @@ class _SecondPageState extends State<SecondPage> {
 
           final docs = snapshot.data!.docs;
 
-          return GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+          return Column(
+            children: [
+              Text('hello data'),
+              GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
 
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 20,
-              childAspectRatio: 1.3,
-            ),
-            scrollDirection: Axis.vertical,
-            itemCount: docs.length,
-            itemBuilder: (context, index) {
-              final data = docs[index].data();
-              final url = data['video'] ?? '';
-              final videoId = YoutubePlayerController.convertUrlToId(url) ?? '';
-
-              if (videoId.isEmpty) return const Text("Некорректная ссылка");
-
-              final controller = YoutubePlayerController.fromVideoId(
-                videoId: videoId,
-                params: const YoutubePlayerParams(
-                  showControls: true,
-                  showFullscreenButton: true,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 20,
+                  childAspectRatio: 1.3,
                 ),
-              );
+                scrollDirection: Axis.vertical,
+                itemCount: docs.length,
+                itemBuilder: (context, index) {
+                  final data = docs[index].data();
+                  final url = data['video'] ?? '';
+                  final videoId =
+                      YoutubePlayerController.convertUrlToId(url) ?? '';
 
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(40),
-                child: Container(
-                  height: 50,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
+                  if (videoId.isEmpty) return const Text("Некорректная ссылка");
+
+                  final controller = YoutubePlayerController.fromVideoId(
+                    videoId: videoId,
+                    params: const YoutubePlayerParams(
+                      showControls: true,
+                      showFullscreenButton: true,
+                    ),
+                  );
+
+                  return ClipRRect(
                     borderRadius: BorderRadius.circular(40),
-                  ),
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(child: YoutubePlayer(controller: controller)),
-                ),
-              );
-            },
+                    child: Container(
+                      height: 50,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        child: YoutubePlayer(controller: controller),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           );
         },
       ),

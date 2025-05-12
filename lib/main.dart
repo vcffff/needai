@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:needai/presentation/screens/books.dart';
 import 'package:needai/presentation/screens/courses.dart';
-import 'package:needai/presentation/screens/favourites.dart';
+import 'package:needai/presentation/screens/favourites/favourites.dart';
 import 'package:needai/presentation/screens/firstpage.dart';
-import 'package:needai/presentation/screens/second_page.dart';
 import 'package:needai/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -15,6 +15,9 @@ final ValueNotifier<int> pageIndexNotifier = ValueNotifier<int>(0);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  print('hello from run');
+  final favprovider = AddToFavourites();
+  await favprovider.loadfav();
   runApp(const MainApp());
 }
 
@@ -54,8 +57,7 @@ class _MainPageState extends State<MainPage> {
     // Header Section
     Firstpage(),
     // White Card Section
-    SecondPage(),
-
+    Books(),
     //list of cources
     Course(),
 

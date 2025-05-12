@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:needai/presentation/screens/courses.dart';
+import 'package:needai/presentation/themes/colors.dart';
 
-Widget buttons() {
+Widget buttons(context) {
   return Row(
     children: [
       Expanded(
@@ -29,7 +29,16 @@ Widget buttons() {
         child: SizedBox(
           height: 80,
           child: FilledButton(
-            onPressed: () {},
+            onPressed: () async {
+              showDialog(
+                barrierDismissible: false,
+                barrierColor: maincolor,
+                context: context,
+                builder: (_) => Center(child: CircularProgressIndicator()),
+              );
+              await Future.delayed(Duration(seconds: 2));
+              Navigator.pop(context);
+            },
             style: FilledButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,

@@ -18,6 +18,21 @@ class oneCourse {
     this.type,
     required this.courseVideos,
   });
+   Map<String, dynamic> toJson() => {
+        'title': title,
+        'hours': hours,
+        'type': type,
+        'courseVideos': courseVideos.map((v) => v.toJson).toList(),
+      };
+
+  factory oneCourse.fromJson(Map<String, dynamic> json) => oneCourse(
+        title: json['title'],
+        hours: json['hours'],
+        type: json['type'],
+        courseVideos: (json['courseVideos'] as List)
+            .map((v) => CourseVideo.fromJson(v))
+            .toList(),
+      );
 }
 
 class CourseVideo {
@@ -25,6 +40,20 @@ class CourseVideo {
   String? title;
   String? url;
   CourseVideo({required this.id, required this.title, required this.url});
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'url': url,
+    };
+  }
+
+  factory CourseVideo.fromJson(Map<String, dynamic> json) {
+    return CourseVideo(
+      id: json['id'],
+      title: json['title'],
+      url: json['url'],
+    );
+  }
 }
 
 List<oneCourse> originalCourses = [
