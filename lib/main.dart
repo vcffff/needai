@@ -1,8 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+<<<<<<< HEAD
 import 'package:needai/presentation/screens/books.dart';
 
+=======
+import 'package:needai/app.dart';
+import 'package:needai/presentation/screens/auth.dart';
+>>>>>>> 02798ac367de54cc4cbde1453e16bdacc32c9add
 import 'package:needai/presentation/screens/courses.dart';
 import 'package:needai/presentation/screens/favourites/favourites.dart';
 import 'package:needai/presentation/screens/firstpage.dart';
@@ -31,6 +36,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
 
         theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
+<<<<<<< HEAD
         home: MainPage(),
       ),
     );
@@ -98,6 +104,9 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
         ],
+=======
+        home: Authourization(),
+>>>>>>> 02798ac367de54cc4cbde1453e16bdacc32c9add
       ),
     );
   }
