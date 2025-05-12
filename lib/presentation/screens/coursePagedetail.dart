@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:needai/data/services/services.dart';
 import 'package:needai/presentation/screens/second_page.dart';
@@ -120,12 +121,33 @@ class _CoursePageState extends State<CoursePage> {
                     Consumer<AddToFavourites>(
                       builder: (context, favProvider, _) {
                         final isFav = favProvider.isFavourite(widget.onecourse);
-                        return Icon(
-                          isFav
-                              ? Icons.star_rounded
-                              : Icons.star_outline_rounded,
-                          size: 60,
-                          color: isFav ? Colors.amber : Colors.grey,
+                        final courseId = widget.onecourse.id.toString();
+
+                        return GestureDetector(
+                          onTap: () async {
+                            final docRef = FirebaseFirestore.instance
+                                .collection('favorites')
+                                .doc(courseId);
+
+                            if (isFav) {
+                              await docRef.delete();
+                              favProvider.removeFromFav(widget.onecourse);
+                            } else {
+                              await docRef.set({
+                                'id': widget.onecourse.id,
+                                'title': widget.onecourse.title,
+                                'hours': widget.onecourse.hours,
+                              });
+                              favProvider.addToFav(widget.onecourse);
+                            }
+                          },
+                          child: Icon(
+                            isFav
+                                ? Icons.star_rounded
+                                : Icons.star_outline_rounded,
+                            size: 60,
+                            color: isFav ? Colors.amber : Colors.grey,
+                          ),
                         );
                       },
                     ),

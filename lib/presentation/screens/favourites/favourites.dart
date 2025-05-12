@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +22,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     super.initState();
     _loadColors();
   }
+
 
   Future<void> _loadColors() async {
     final prefs = await SharedPreferences.getInstance();
@@ -105,7 +107,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           mainAxisExtent: 260,
                         ),
                     itemBuilder: (context, index) {
-               
                       if (cardColors.length <= index) {
                         return const SizedBox.shrink();
                       }

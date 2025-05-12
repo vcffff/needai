@@ -11,7 +11,7 @@ class SearchFill {
 
 final List<SearchFill> searches = [
   SearchFill(
-    title: "Languages",
+    title: "Computer Science",
     image: 'assets/images/Vector-1.png',
     colour: const Color.fromRGBO(206, 236, 254, 1),
   ),
@@ -24,6 +24,26 @@ final List<SearchFill> searches = [
     title: "Biology",
     image: "assets/images/Vector-1.png",
     colour: const Color.fromARGB(255, 68, 134, 70),
+  ),
+  SearchFill(
+    title: "Languages",
+    image: 'assets/images/Vector-1.png',
+    colour: const Color.fromRGBO(206, 236, 254, 1),
+  ),
+  SearchFill(
+    title: "Physics",
+    image: 'assets/images/Vector.png',
+    colour: const Color.fromRGBO(239, 224, 255, 1),
+  ),
+  SearchFill(
+    title: "Astronomy",
+    image: 'assets/images/Vector-1.png',
+    colour: const Color.fromRGBO(239, 224, 255, 1),
+  ),
+  SearchFill(
+    title: "History",
+    image: 'assets/images/Vector-1.png',
+    colour: const Color.fromRGBO(206, 236, 254, 1),
   ),
 ];
 

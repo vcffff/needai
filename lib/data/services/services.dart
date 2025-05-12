@@ -8,31 +8,35 @@ class SearchFill {
 }
 
 class oneCourse {
+  int id;
   String? title;
   int? hours;
   String? type;
   List<CourseVideo> courseVideos;
   oneCourse({
+    required this.id,
     required this.title,
     required this.hours,
     this.type,
     required this.courseVideos,
   });
-   Map<String, dynamic> toJson() => {
-        'title': title,
-        'hours': hours,
-        'type': type,
-        'courseVideos': courseVideos.map((v) => v.toJson).toList(),
-      };
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'hours': hours,
+    'type': type,
+    'courseVideos': courseVideos.map((v) => v.toJson).toList(),
+  };
 
   factory oneCourse.fromJson(Map<String, dynamic> json) => oneCourse(
-        title: json['title'],
-        hours: json['hours'],
-        type: json['type'],
-        courseVideos: (json['courseVideos'] as List)
+    id: json['id'],
+    title: json['title'],
+    hours: json['hours'],
+    type: json['type'],
+    courseVideos:
+        (json['courseVideos'] as List)
             .map((v) => CourseVideo.fromJson(v))
             .toList(),
-      );
+  );
 }
 
 class CourseVideo {
@@ -41,24 +45,18 @@ class CourseVideo {
   String? url;
   CourseVideo({required this.id, required this.title, required this.url});
   Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'url': url,
-    };
+    return {'title': title, 'url': url};
   }
 
   factory CourseVideo.fromJson(Map<String, dynamic> json) {
-    return CourseVideo(
-      id: json['id'],
-      title: json['title'],
-      url: json['url'],
-    );
+    return CourseVideo(id: json['id'], title: json['title'], url: json['url']);
   }
 }
 
 List<oneCourse> originalCourses = [
   oneCourse(
-   title: 'Physics',
+    id: 0,
+    title: 'Physics',
     hours: 18,
     type: 'New',
     courseVideos: [
@@ -80,9 +78,33 @@ List<oneCourse> originalCourses = [
     ],
   ),
   oneCourse(
+    id: 1,
     title: 'Math',
     hours: 20,
     type: 'Popular',
+    courseVideos: [
+      CourseVideo(
+        id: 2,
+        title: 'Kaprekar\'s constant',
+        url: 'https://youtu.be/xtyNuOikdE4?si=TPiu3CMX9Khbc_Bv',
+      ),
+      CourseVideo(
+        id: 3,
+        title: 'Derivatives',
+        url: 'https://youtu.be/N2PpRnFqnqY?si=Fg0e2mlyrvLCsZHE',
+      ),
+      CourseVideo(
+        id: 4,
+        title: 'Integral',
+        url: 'https://youtu.be/nCx6FTChgow?si=4Wsa-5wr55G9CIen',
+      ),
+    ],
+  ),
+  oneCourse(
+    id: 2,
+    title: 'English',
+    hours: 15,
+    type: 'New',
     courseVideos: [
       CourseVideo(
         id: 0,
@@ -102,23 +124,93 @@ List<oneCourse> originalCourses = [
     ],
   ),
   oneCourse(
-    title: 'English',
-    hours: 15,
+    id: 2,
+    title: 'Computer Science',
+    hours: 28,
     type: 'New',
     courseVideos: [
       CourseVideo(
         id: 0,
-        title: 'Kaprekar\'s constant',
+        title: 'Introduction to Algorithms',
         url: 'https://youtu.be/xtyNuOikdE4?si=TPiu3CMX9Khbc_Bv',
       ),
       CourseVideo(
         id: 1,
-        title: 'Derivatives',
+        title: 'Data Structures: Arrays and Linked Lists',
         url: 'https://youtu.be/N2PpRnFqnqY?si=Fg0e2mlyrvLCsZHE',
       ),
       CourseVideo(
         id: 2,
-        title: 'Integral',
+        title: 'Basics of Object-Oriented Programming',
+        url: 'https://youtu.be/nCx6FTChgow?si=4Wsa-5wr55G9CIen',
+      ),
+    ],
+  ),
+  oneCourse(
+    id: 3,
+    title: 'Introduction to Astronomy',
+    hours: 24,
+    type: 'New',
+    courseVideos: [
+      CourseVideo(
+        id: 0,
+        title: 'The Solar System: Planets and Moons',
+        url: 'https://youtu.be/xtyNuOikdE4?si=TPiu3CMX9Khbc_Bv',
+      ),
+      CourseVideo(
+        id: 1,
+        title: 'Stellar Evolution: Birth and Death of Stars',
+        url: 'https://youtu.be/N2PpRnFqnqY?si=Fg0e2mlyrvLCsZHE',
+      ),
+      CourseVideo(
+        id: 2,
+        title: 'The Big Bang and Cosmology',
+        url: 'https://youtu.be/nCx6FTChgow?si=4Wsa-5wr55G9CIen',
+      ),
+    ],
+  ),
+  oneCourse(
+    id: 4,
+    title: 'Art History and Techniques',
+    hours: 20,
+    type: 'New',
+    courseVideos: [
+      CourseVideo(
+        id: 0,
+        title: 'Renaissance Art: Masters and Techniques',
+        url: 'https://youtu.be/xtyNuOikdE4?si=TPiu3CMX9Khbc_Bv',
+      ),
+      CourseVideo(
+        id: 1,
+        title: 'Impressionism and Modern Art',
+        url: 'https://youtu.be/N2PpRnFqnqY?si=Fg0e2mlyrvLCsZHE',
+      ),
+      CourseVideo(
+        id: 2,
+        title: 'Introduction to Drawing and Painting',
+        url: 'https://youtu.be/nCx6FTChgow?si=4Wsa-5wr55G9CIen',
+      ),
+    ],
+  ),
+  oneCourse(
+    id: 5,
+    title: 'Kinematic Physics Essentials',
+    hours: 22,
+    type: 'New',
+    courseVideos: [
+      CourseVideo(
+        id: 0,
+        title: 'Motion in One Dimension',
+        url: 'https://youtu.be/xtyNuOikdE4?si=TPiu3CMX9Khbc_Bv',
+      ),
+      CourseVideo(
+        id: 1,
+        title: 'Vectors and Two-Dimensional Motion',
+        url: 'https://youtu.be/N2PpRnFqnqY?si=Fg0e2mlyrvLCsZHE',
+      ),
+      CourseVideo(
+        id: 2,
+        title: 'Projectile Motion and Circular Motion',
         url: 'https://youtu.be/nCx6FTChgow?si=4Wsa-5wr55G9CIen',
       ),
     ],

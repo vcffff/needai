@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:pdfx/pdfx.dart';
@@ -11,6 +10,8 @@ class Books extends StatefulWidget {
 }
 
 class _BooksState extends State<Books> {
+  int current = 0;
+  int total = 0;
   PdfControllerPinch? pdfControllerPinch;
   String? errorMessage;
 
@@ -25,10 +26,9 @@ class _BooksState extends State<Books> {
 
   Future<void> loadPdf() async {
     try {
-      // Create a Future<PdfDocument> for PdfControllerPinch
-      final futureDoc = Future.value(await PdfDocument.openAsset('assets/pdfs/sat.vocab.pdf'));
+      final document = PdfDocument.openAsset('assets/pdfs/sat.vocab.pdf');
       setState(() {
-        pdfControllerPinch = PdfControllerPinch(document: futureDoc);
+        pdfControllerPinch = PdfControllerPinch(document: document);
       });
     } catch (e) {
       setState(() {
@@ -47,22 +47,32 @@ class _BooksState extends State<Books> {
   Widget build(BuildContext context) {
     if (kIsWeb) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Books')),
-        body: const Center(
-          child: Text(
-            'PDF viewing is not supported on the web. Please download the app or the PDF file.',
-          ),
-        ),
+        appBar: AppBar(title: Text('Books (${current + 1}/$total)')),
+        body: const Center(child: Text('PDF viewing is not supported')),
       );
     }
 
     return Scaffold(
       appBar: AppBar(title: const Text('Books')),
-      body: errorMessage != null
-          ? Center(child: Text(errorMessage!))
-          : pdfControllerPinch == null
+      body:
+          errorMessage != null
+              ? Center(child: Text(errorMessage!))
+              : pdfControllerPinch == null
               ? const Center(child: CircularProgressIndicator())
-              : PdfViewPinch(controller: pdfControllerPinch!),
+              : PdfViewPinch(
+                scrollDirection: Axis.horizontal,
+                onPageChanged: (page) {
+                  setState(() {
+                    current = page;
+                  });
+                },
+                controller: pdfControllerPinch!,
+                onDocumentLoaded: (page) {
+                  setState(() {
+                    total = page.pagesCount;
+                  });
+                },
+              ),
     );
   }
 }
