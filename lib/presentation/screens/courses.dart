@@ -166,7 +166,7 @@ class _CourseState extends State<Course> {
                           SizedBox(height: 20),
                           hoursChoose(),
                           SizedBox(height: 60),
-                          buttons(),
+                          buttons(context),
                         ],
                       ),
                     ),

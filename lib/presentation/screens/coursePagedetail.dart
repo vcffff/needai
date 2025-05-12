@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:needai/data/services/services.dart';
+import 'package:needai/presentation/screens/second_page.dart';
+import 'package:needai/presentation/themes/colors.dart';
 import 'package:needai/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -88,7 +90,7 @@ class _CoursePageState extends State<CoursePage> {
                   ),
                   minimumSize: Size(double.infinity, 100),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   final favProvider = Provider.of<AddToFavourites>(
                     context,
                     listen: false,
@@ -101,17 +103,47 @@ class _CoursePageState extends State<CoursePage> {
                     favProvider.addToFav(widget.onecourse);
                   }
 
-                  setState(() {});
-                },
-                child: Consumer<AddToFavourites>(
-                  builder: (context, favProvider, _) {
-                    final isFav = favProvider.isFavourite(widget.onecourse);
-                    return Icon(
-                      isFav ? Icons.star_rounded : Icons.star_outline_rounded,
-                      size: 60,
-                      color: isFav ? Colors.amber : Colors.grey,
+                  await favProvider.savefav();
+                  setState(() {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Successfully added"),
+                        duration: Duration(seconds: 2),
+                      ),
                     );
-                  },
+                  });
+                },
+
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Consumer<AddToFavourites>(
+                      builder: (context, favProvider, _) {
+                        final isFav = favProvider.isFavourite(widget.onecourse);
+                        return Icon(
+                          isFav
+                              ? Icons.star_rounded
+                              : Icons.star_outline_rounded,
+                          size: 60,
+                          color: isFav ? Colors.amber : Colors.grey,
+                        );
+                      },
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: maincolor,
+                      ),
+                      onPressed: () {},
+                      child: Text(
+                        " Start now!",
+                        style: TextStyle(
+                          color: lighttext,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -156,7 +188,12 @@ class oneVideo extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SecondPage()),
+                );
+              },
               icon: Icon(
                 Icons.play_circle_outline_rounded,
                 size: 40,

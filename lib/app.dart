@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:needai/presentation/screens/auth.dart';
 import 'package:needai/presentation/screens/courses.dart';
-import 'package:needai/presentation/screens/favourites.dart';
+import 'package:needai/presentation/screens/favourites/favourites.dart';
 import 'package:needai/presentation/screens/firstpage.dart';
 import 'package:needai/presentation/screens/second_page.dart';
 import 'package:needai/providers/user_provider.dart';
