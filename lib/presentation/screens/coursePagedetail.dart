@@ -89,33 +89,34 @@ class _CoursePageState extends State<CoursePage> {
                   minimumSize: Size(double.infinity, 100),
                 ),
                 onPressed: () {
-  final favProvider = Provider.of<AddToFavourites>(context, listen: false);
-  final isFav = favProvider.isFavourite(widget.onecourse);
+                  final favProvider = Provider.of<AddToFavourites>(
+                    context,
+                    listen: false,
+                  );
+                  final isFav = favProvider.isFavourite(widget.onecourse);
 
-  if (isFav) {
-    favProvider.removeFromFav(widget.onecourse);
-  } else {
-    favProvider.addToFav(widget.onecourse);
-  }
+                  if (isFav) {
+                    favProvider.removeFromFav(widget.onecourse);
+                  } else {
+                    favProvider.addToFav(widget.onecourse);
+                  }
 
-  setState(() {}); 
-},
-child: Consumer<AddToFavourites>(
-  builder: (context, favProvider, _) {
-    final isFav = favProvider.isFavourite(widget.onecourse);
-    return Icon(
-      isFav ? Icons.star_rounded : Icons.star_outline_rounded,
-      size: 60,
-      color: isFav ? Colors.amber : Colors.grey,
-    );
-  },
-),
-
+                  setState(() {});
+                },
+                child: Consumer<AddToFavourites>(
+                  builder: (context, favProvider, _) {
+                    final isFav = favProvider.isFavourite(widget.onecourse);
+                    return Icon(
+                      isFav ? Icons.star_rounded : Icons.star_outline_rounded,
+                      size: 60,
+                      color: isFav ? Colors.amber : Colors.grey,
+                    );
+                  },
+                ),
+              ),
             ),
-          
-      ),
-          ]
-        )
+          ],
+        ),
       ),
     );
   }

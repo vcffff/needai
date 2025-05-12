@@ -138,7 +138,7 @@ class _CourseState extends State<Course> {
                 context: context,
                 builder: (BuildContext context) {
                   return SizedBox(
-                    height: 500,
+                    height: 900,
                     child: Padding(
                       padding: EdgeInsets.all(10),
                       child: Column(
