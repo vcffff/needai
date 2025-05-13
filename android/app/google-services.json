@@ -12,7 +12,20 @@
           "package_name": "com.example.needai"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "414543069387-0meiqun7gkqiudu4hiq9713aaeltn55i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.needai",
+            "certificate_hash": "0460f12b2fe81a8d9d5203520fad99628242ef79"
+          }
+        },
+        {
+          "client_id": "414543069387-ncgp2e3057rpfjv4at2s9s3mrfpnn18l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDatA2g17JLiTJxvZd9ZUFImLkI0NIISlI"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414543069387-ncgp2e3057rpfjv4at2s9s3mrfpnn18l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "414543069387-i8kbjdgagdchrvr3r59n19vr7hpa01ka.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.needai"
+              }
+            }
+          ]
         }
       }
     }

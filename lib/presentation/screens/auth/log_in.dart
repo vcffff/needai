@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:needai/app.dart';
+import 'package:needai/data/services/services.dart';
 
 class LogOrSign extends StatefulWidget {
   final bool isSigned;
@@ -11,6 +15,84 @@ class LogOrSign extends StatefulWidget {
 class _LogOrSignState extends State<LogOrSign> {
   bool _obscureText = true;
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        print('Sign in aborted by user');
+        return;
+      }
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+      print(userCredential.user?.displayName);
+    } catch (e) {
+      print('Error during Google Sign-In: $e');
+    }
+  }
+
+  void registerButtonAction() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Please fill in both fields.")));
+      return;
+    }
+
+    bool isregister = await Firebaseservices().register(
+      email: email,
+      password: password,
+    );
+    if (isregister) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Registration failed. Please try again.")),
+      );
+    }
+  }
+
+  void loginButtonAction() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Please fill in both fields.")));
+      return;
+    }
+
+    bool logined = await Firebaseservices().authbyemail(
+      email: email,
+      password: password,
+    );
+    if (logined) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login failed. Please check your credentials.")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +154,7 @@ class _LogOrSignState extends State<LogOrSign> {
                                   ),
                                   SizedBox(height: 3),
                                   TextField(
+                                    controller: _emailController,
                                     decoration: InputDecoration(
                                       hintText: 'Email',
                                       contentPadding: EdgeInsets.symmetric(
@@ -106,6 +189,7 @@ class _LogOrSignState extends State<LogOrSign> {
                                   ),
                                   SizedBox(height: 3),
                                   TextField(
+                                    controller: _passwordController,
                                     obscureText: _obscureText,
                                     decoration: InputDecoration(
                                       hintText: 'Password',
@@ -151,7 +235,11 @@ class _LogOrSignState extends State<LogOrSign> {
                               ),
                               SizedBox(height: 30),
                               FilledButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  widget.isSigned
+                                      ? loginButtonAction()
+                                      : registerButtonAction();
+                                },
 
                                 style: FilledButton.styleFrom(
                                   backgroundColor: Color.fromRGBO(
@@ -177,19 +265,23 @@ class _LogOrSignState extends State<LogOrSign> {
                                 color: const Color.fromARGB(255, 137, 137, 137),
                                 height: 36,
                               ),
-                              SizedBox(
-                                width: 60,
-                                height: 60,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                  onPressed: () {},
-                                  child: Image.asset(
-                                    'assets/images/google_icon.webp',
-                                  ),
-                                ),
-                              ),
+                              widget.isSigned
+                                  ? SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                      onPressed: () {
+                                        signInWithGoogle();
+                                      },
+                                      child: Image.asset(
+                                        'assets/images/google_icon.webp',
+                                      ),
+                                    ),
+                                  )
+                                  : SizedBox.shrink(),
                             ],
                           ),
                         ),
