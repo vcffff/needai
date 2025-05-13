@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:needai/presentation/screens/auth.dart';
+import 'package:needai/presentation/screens/books.dart';
 import 'package:needai/presentation/screens/courses.dart';
 import 'package:needai/presentation/screens/favourites/favourites.dart';
 import 'package:needai/presentation/screens/firstpage.dart';
@@ -10,6 +11,23 @@ import 'package:needai/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AddToFavourites())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+
+        theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
+        home: MainPage(),
+      ),
+    );
+  }
+}
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -28,16 +46,17 @@ class _MainPageState extends State<MainPage> {
 
   List<Widget> pages = [
     // Header Section
-    Authourization(),
     Firstpage(),
     // White Card Section
-    SecondPage(),
-
+    //books
+    Books(),
     //list of cources
     Course(),
 
     //favourites
     FavoritesPage(),
+
+    Center(child: Text('negr')),
   ];
   @override
   Widget build(BuildContext context) {

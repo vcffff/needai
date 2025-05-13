@@ -1,13 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
-<<<<<<< HEAD
 import 'package:needai/presentation/screens/books.dart';
-
-=======
 import 'package:needai/app.dart';
 import 'package:needai/presentation/screens/auth.dart';
->>>>>>> 02798ac367de54cc4cbde1453e16bdacc32c9add
 import 'package:needai/presentation/screens/courses.dart';
 import 'package:needai/presentation/screens/favourites/favourites.dart';
 import 'package:needai/presentation/screens/firstpage.dart';
@@ -22,92 +18,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const MainApp());
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AddToFavourites())],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-
-        theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
-<<<<<<< HEAD
-        home: MainPage(),
+  runApp(
+    MaterialApp(
+      theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        scaffoldBackgroundColor: Colors.white,
       ),
-    );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  int current = 0;
-  void changepage(int index) {
-    setState(() {
-      current = index;
-    });
-  }
-
-  List<Widget> pages = [
-    // Header Section
-    Firstpage(),
-    // White Card Section
-    //books
-    Books(),
-    //list of cources
-    Course(),
-
-    //favourites
-    FavoritesPage(),
-
-    Center(child: Text('negr')),
-  ];
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: pages[current],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: changepage,
-        currentIndex: current,
-        items: const [
-          BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(CupertinoIcons.home, color: Colors.blueAccent),
-          ),
-          BottomNavigationBarItem(
-            label: 'Course',
-            icon: Icon(CupertinoIcons.book, color: Colors.blueAccent),
-          ),
-          BottomNavigationBarItem(
-            label: 'Search',
-            icon: Icon(CupertinoIcons.search, color: Colors.blueAccent),
-          ),
-          BottomNavigationBarItem(
-            label: 'Message',
-            icon: Icon(CupertinoIcons.heart_fill, color: Colors.blueAccent),
-          ),
-          BottomNavigationBarItem(
-            label: 'Profile',
-            icon: Icon(
-              CupertinoIcons.profile_circled,
-              color: Colors.blueAccent,
-            ),
-          ),
-        ],
-=======
-        home: Authourization(),
->>>>>>> 02798ac367de54cc4cbde1453e16bdacc32c9add
-      ),
-    );
-  }
+      debugShowCheckedModeBanner: false,
+      home: Authourization(),
+    ),
+  );
 }

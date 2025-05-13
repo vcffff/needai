@@ -33,7 +33,7 @@ class _LogOrSignState extends State<LogOrSign> {
                         ),
                       )
                       : Text(
-                        'Log In',
+                        'Sign Up',
                         style: TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.w900,
@@ -168,7 +168,27 @@ class _LogOrSignState extends State<LogOrSign> {
                                     ),
                                   ),
                                 ),
-                                child: Text('Log In'),
+                                child:
+                                    widget.isSigned
+                                        ? Text('Log In')
+                                        : Text('Sign Up'),
+                              ),
+                              Divider(
+                                color: const Color.fromARGB(255, 137, 137, 137),
+                                height: 36,
+                              ),
+                              SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                  onPressed: () {},
+                                  child: Image.asset(
+                                    'assets/images/google_icon.webp',
+                                  ),
+                                ),
                               ),
                             ],
                           ),
