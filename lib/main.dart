@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:needai/presentation/screens/auth.dart';
 import 'package:needai/presentation/screens/books.dart';
 import 'package:needai/presentation/screens/courses.dart';
 import 'package:needai/presentation/screens/favourites/favourites.dart';
@@ -30,7 +31,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
 
         theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
-        home: MainPage(),
+        home: Authourization(),
       ),
     );
   }

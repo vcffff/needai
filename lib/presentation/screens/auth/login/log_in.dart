@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:needai/app.dart';
-import 'package:needai/data/services/services.dart';
+import 'package:needai/data/services/firebase_services.dart';
+import 'package:needai/presentation/screens/firstpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogOrSign extends StatefulWidget {
   final bool isSigned;
@@ -17,6 +19,24 @@ class _LogOrSignState extends State<LogOrSign> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    checklogin();
+  }
+
+  Future<void> checklogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isloggedin = prefs.getBool('isloggedin') ?? false;
+    if (isloggedin) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Firstpage()),
+      );
+    }
+  }
+  
 
   Future<void> signInWithGoogle() async {
     try {
@@ -86,6 +106,9 @@ class _LogOrSignState extends State<LogOrSign> {
         context,
         MaterialPageRoute(builder: (context) => MainPage()),
       );
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isloggedin', true);
+      print(prefs);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Login failed. Please check your credentials.")),

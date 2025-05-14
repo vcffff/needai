@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:needai/presentation/screens/auth/log_in.dart';
+import 'package:needai/presentation/screens/auth/login/log_in.dart';
 
 class FirstAuthorizationPage extends StatefulWidget {
   const FirstAuthorizationPage({super.key});

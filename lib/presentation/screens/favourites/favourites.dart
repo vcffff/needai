@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:needai/presentation/screens/second_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:needai/presentation/themes/colors.dart';
@@ -16,19 +17,23 @@ class FavoritesPage extends StatefulWidget {
 
 class _FavoritesPageState extends State<FavoritesPage> {
   List<List<Color>> cardColors = [];
+  List<Map<String, dynamic>> favoritesfromfirebase = [];
 
   @override
   void initState() {
     super.initState();
-    _loadColors();
+    _loadFavoritesFromFirestore();
   }
 
-  Future<void> _loadColors() async {
+  Future<void> _loadFavoritesFromFirestore() async {
     final prefs = await SharedPreferences.getInstance();
-    final favProvider = Provider.of<AddToFavourites>(context, listen: false);
+    final snapshot =
+        await FirebaseFirestore.instance.collection('favorites').get();
 
     setState(() {
-      cardColors = List.generate(favProvider.favourites.length, (index) {
+      favoritesfromfirebase = snapshot.docs.map((doc) => doc.data()).toList();
+
+      cardColors = List.generate(favoritesfromfirebase.length, (index) {
         final startColorValue = prefs.getInt('startColor_$index');
         final endColorValue = prefs.getInt('endColor_$index');
 
@@ -142,7 +147,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${favProvider.favourites[index].title}",
+                                  "${favoritesfromfirebase[index]['title']}",
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
@@ -154,7 +159,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                 const SizedBox(height: 50),
                                 LinearProgressIndicator(
                                   value:
-                                      favProvider.favourites[index].hours! / 24,
+                                      favoritesfromfirebase[index]['hours']! /
+                                      24,
                                   backgroundColor: Colors.white.withOpacity(
                                     0.5,
                                   ),
@@ -162,13 +168,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                   minHeight: 8,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
-                                const SizedBox(height: 55),
+                                const SizedBox(height: 25),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Completed\n${favProvider.favourites[index].hours}/24',
+                                      'Completed\n${favoritesfromfirebase[index]['hours']}/24',
                                       style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.white,
@@ -176,7 +182,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                       ),
                                     ),
                                     InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => SecondPage(),
+                                          ),
+                                        );
+                                      },
                                       child: CircleAvatar(
                                         backgroundColor: bluecolor,
                                         radius: 22,
