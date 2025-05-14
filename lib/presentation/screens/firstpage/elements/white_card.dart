@@ -37,7 +37,8 @@ int currentpage=0;
 
   @override
   Widget build(BuildContext context) {
-    return // White Card Section
+    return 
+    // White Card Section
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
       child: Container(
