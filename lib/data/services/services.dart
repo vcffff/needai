@@ -149,7 +149,7 @@ List<oneCourse> originalCourses = [
   ),
   oneCourse(
     id: 3,
-    title: 'Introduction to Astronomy',
+    title: 'Astronomy',
     hours: 24,
     type: 'New',
     courseVideos: [

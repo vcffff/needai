@@ -23,7 +23,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
     _loadColors();
   }
 
-
   Future<void> _loadColors() async {
     final prefs = await SharedPreferences.getInstance();
     final favProvider = Provider.of<AddToFavourites>(context, listen: false);
@@ -121,6 +120,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Container(
+                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
@@ -144,14 +144,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                 Text(
                                   "${favProvider.favourites[index].title}",
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 25,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
+                                    color: Colors.white,
                                   ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                const SizedBox(height: 15),
+                                const SizedBox(height: 50),
                                 LinearProgressIndicator(
                                   value:
                                       favProvider.favourites[index].hours! / 24,
@@ -171,8 +171,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                       'Completed\n${favProvider.favourites[index].hours}/24',
                                       style: const TextStyle(
                                         fontSize: 14,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     InkWell(
