@@ -3,77 +3,75 @@ import 'package:flutter/material.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> fetchBooks() async {
-  final DocumentReference documentRef = FirebaseFirestore.instance
-      .collection('books')
-      .doc('books_test');
-  final DocumentSnapshot snapshot = await documentRef.get();
-  if (snapshot.exists) {
-    final List<dynamic> books = snapshot['books'];
-    for (var book in books) {
-      final String title = book['title'];
-      final String url = book['url'];
-      print("Title: $title");
-      print("URL: $url");
-    }
-  } else {
-    print("No books found.");
-  }
-}
-
-class typeOfBooks extends StatefulWidget {
-  const typeOfBooks({super.key});
+class Books extends StatefulWidget {
+  const Books({super.key});
 
   @override
-  State<typeOfBooks> createState() => _typeOfBooksState();
+  State<Books> createState() => _BooksState();
 }
 
-class _typeOfBooksState extends State<typeOfBooks> {
+class _BooksState extends State<Books> {
   @override
   Widget build(BuildContext context) {
-    @override
-    Future<void> fetchTypes() async {
-      final DocumentReference documentReference = FirebaseFirestore.instance
-          .collection('books')
-          .doc('typesOfBooks');
-      final DocumentSnapshot snapshot = await documentReference.get();
-      if (snapshot.exists) {
-    final List<dynamic> typesOfBooks = snapshot.get('types');
-    for (var bookType in typesOfBooks) {
-      final String title = bookType;
-      print("Title: $title");
-    }
-  } else {
-    print("No books found.");
+    return TypeOfBooks();
+  }
+}
+
+class TypeOfBooks extends StatefulWidget {
+  const TypeOfBooks({super.key});
+
+  @override
+  State<TypeOfBooks> createState() => _TypeOfBooksState();
+}
+
+class _TypeOfBooksState extends State<TypeOfBooks> {
+  List<dynamic> typesOfBooks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTypes();
   }
 
-    }
+  Future<void> fetchTypes() async {
+    final DocumentReference documentReference = FirebaseFirestore.instance
+        .collection('books')
+        .doc('typesOfBooks');
 
+    final DocumentSnapshot snapshot = await documentReference.get();
+
+    if (snapshot.exists) {
+      setState(() {
+        typesOfBooks = snapshot.get('types');
+      });
+    } else {
+      print("No books found.");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: typesOfBooks.length,
       itemBuilder: (context, i) {
-        Card(
+        return Card(
           elevation: 2.0,
-          margin: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.grey),
+            decoration: const BoxDecoration(color: Colors.grey),
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               leading: Container(
                 padding: const EdgeInsets.only(right: 12),
                 decoration: const BoxDecoration(
                   border: Border(
-                    right: BorderSide(width: 1,color: Colors.grey),
-                    
-                  )
+                    right: BorderSide(width: 1, color: Colors.grey),
+                  ),
                 ),
-                child: Icon(
-                  Icons.book,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.book, color: Colors.white),
               ),
-              title: Text(typesOfBooks[i].),
+              title: Text(typesOfBooks[i]),
             ),
           ),
         );
@@ -81,6 +79,7 @@ class _typeOfBooksState extends State<typeOfBooks> {
     );
   }
 }
+
 
 
 
