@@ -36,7 +36,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
 
         theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
-        home: Authourization(),
+        home: Books(),
       ),
     );
   }
