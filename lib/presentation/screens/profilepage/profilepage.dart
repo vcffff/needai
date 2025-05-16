@@ -13,6 +13,11 @@ class _ProfilepageState extends State<Profilepage> {
   @override
   Widget build(BuildContext context) {
     final users = Provider.of<DataProvider>(context).users;
-    return Scaffold(body: Center(child: Text(users[2])));
+
+    return Scaffold(
+      body: Center(
+        child: Text('Hello, ${users[1]}'),
+      ), 
+    );
   }
 }

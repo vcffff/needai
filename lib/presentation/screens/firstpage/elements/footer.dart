@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Footer extends StatefulWidget {
-  const Footer({super.key});
+  const   Footer({super.key});
 
   @override
   State<Footer> createState() => _FooterState();

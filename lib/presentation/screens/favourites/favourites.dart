@@ -26,6 +26,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     _loadFavoritesFromFirestore();
   }
 
+
   Future<void> _loadFavoritesFromFirestore() async {
     final prefs = await SharedPreferences.getInstance();
     final snapshot =
@@ -68,6 +69,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Icon(Icons.favorite),
         title: Text(
           'Favorites',
           style: TextStyle(

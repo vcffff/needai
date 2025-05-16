@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:needai/app.dart';
+import 'package:needai/main.dart';
 import 'package:needai/data/services/firebase_services.dart';
 import 'package:needai/presentation/screens/firstpage/firstpage.dart';
 import 'package:needai/presentation/themes/app_theme.dart';
