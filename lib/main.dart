@@ -30,7 +30,8 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AddToFavourites()),
-        ChangeNotifierProvider(create: (_) => DataProvider()),
+        ChangeNotifierProvider(create: (_) => DataProvider()
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
