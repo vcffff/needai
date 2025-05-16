@@ -36,7 +36,6 @@ class _LogOrSignState extends State<LogOrSign> {
       );
     }
   }
-  
 
   Future<void> signInWithGoogle() async {
     try {
