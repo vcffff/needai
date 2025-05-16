@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:needai/presentation/screens/second_page.dart';
+import 'package:needai/presentation/screens/video_page/videos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:needai/presentation/themes/colors.dart';
@@ -12,6 +12,7 @@ class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _FavoritesPageState createState() => _FavoritesPageState();
 }
 
@@ -53,8 +54,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
             random.nextInt(256),
             0.8,
           );
-          prefs.setInt('startColor_$index', startColor.value);
-          prefs.setInt('endColor_$index', endColor.value);
+          prefs.setInt('startColor_$index', startColor.toARGB32());
+          prefs.setInt('endColor_$index', endColor.toARGB32());
           return [startColor, endColor];
         }
       });
@@ -67,12 +68,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Favorites',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: lighttext,
           ),
         ),
         backgroundColor: bluecolor,
@@ -80,21 +81,21 @@ class _FavoritesPageState extends State<FavoritesPage> {
         centerTitle: true,
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFE3F2FD), Colors.white],
+            colors: [gradient1, lighttext],
           ),
         ),
         child:
             favProvider.favourites.isEmpty
-                ? const Center(
+                ? Center(
                   child: Text(
                     'No favorites yet',
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.grey,
+                      color: circlecolor,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -120,7 +121,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
                       return Card(
                         elevation: 8,
-                        shadowColor: Colors.black26,
+                        shadowColor: blackcolor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -135,7 +136,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.blue.withOpacity(0.1),
+                                // ignore: deprecated_member_use
+                                color: maincolor.withOpacity(0.1),
                                 blurRadius: 10,
                                 offset: const Offset(0, 5),
                               ),
@@ -148,10 +150,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               children: [
                                 Text(
                                   "${favoritesfromfirebase[index]['title']}",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color: lighttext,
                                   ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -161,9 +163,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                   value:
                                       favoritesfromfirebase[index]['hours']! /
                                       24,
-                                  backgroundColor: Colors.white.withOpacity(
-                                    0.5,
-                                  ),
+                                  // ignore: deprecated_member_use
+                                  backgroundColor: lighttext.withOpacity(0.5),
                                   color: bluecolor,
                                   minHeight: 8,
                                   borderRadius: BorderRadius.circular(4),
@@ -175,9 +176,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                   children: [
                                     Text(
                                       'Completed\n${favoritesfromfirebase[index]['hours']}/24',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 14,
-                                        color: Colors.white,
+                                        color: lighttext,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -193,9 +194,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                       child: CircleAvatar(
                                         backgroundColor: bluecolor,
                                         radius: 22,
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.play_arrow,
-                                          color: Colors.white,
+                                          color: lighttext,
                                           size: 28,
                                         ),
                                       ),

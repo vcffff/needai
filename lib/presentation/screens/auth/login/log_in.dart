@@ -3,8 +3,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:needai/app.dart';
 import 'package:needai/data/services/firebase_services.dart';
-import 'package:needai/presentation/screens/firstpage.dart';
+import 'package:needai/presentation/screens/firstpage/firstpage.dart';
+import 'package:needai/presentation/themes/app_theme.dart';
+import 'package:needai/presentation/themes/colors.dart';
+import 'package:needai/providers/data_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LogOrSign extends StatefulWidget {
   final bool isSigned;
@@ -23,26 +28,57 @@ class _LogOrSignState extends State<LogOrSign> {
   @override
   void initState() {
     super.initState();
-    checklogin();
+    checkLogin();
   }
 
-  Future<void> checklogin() async {
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> checkLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    final isloggedin = prefs.getBool('isloggedin') ?? false;
-    if (isloggedin) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Firstpage()),
+    final isLoggedIn = prefs.getBool('isloggedin') ?? false;
+    if (isLoggedIn) {
+      showDialog(
+        context: context,
+        builder:
+            (_) => const Center(
+              child: CircularProgressIndicator(color: AppTheme.primary),
+            ),
+        barrierDismissible: false,
       );
+      await Future.delayed(const Duration(seconds: 2));
+      if (mounted) {
+        Navigator.pop(context); // Dismiss loading dialog
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainPage()),
+        );
+      }
     }
   }
-  
 
   Future<void> signInWithGoogle() async {
     try {
+      showDialog(
+        context: context,
+        builder:
+            (_) => const Center(
+              child: CircularProgressIndicator(color: AppTheme.primary),
+            ),
+        barrierDismissible: false,
+      );
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
-        print('Sign in aborted by user');
+        if (mounted) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Sign-in aborted.')));
+        }
         return;
       }
       final GoogleSignInAuthentication googleAuth =
@@ -51,267 +87,339 @@ class _LogOrSignState extends State<LogOrSign> {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
-      print(userCredential.user?.displayName);
-    } catch (e) {
-      print('Error during Google Sign-In: $e');
-    }
-  }
-
-  void registerButtonAction() async {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Please fill in both fields.")));
-      return;
-    }
-
-    bool isregister = await Firebaseservices().register(
-      email: email,
-      password: password,
-    );
-    if (isregister) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainPage()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Registration failed. Please try again.")),
-      );
-    }
-  }
-
-  void loginButtonAction() async {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Please fill in both fields.")));
-      return;
-    }
-
-    bool logined = await Firebaseservices().authbyemail(
-      email: email,
-      password: password,
-    );
-    if (logined) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainPage()),
-      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isloggedin', true);
-      print(prefs);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login failed. Please check your credentials.")),
-      );
+      if (googleUser.email.isNotEmpty) {
+        Provider.of<DataProvider>(
+          context,
+          listen: false,
+        ).adduser(googleUser.email);
+      }
+      if (mounted) {
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainPage()),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Google Sign-In failed. Please try again.'),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> registerButtonAction() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        showDialog(
+          context: context,
+          builder:
+              (_) => const Center(
+                child: CircularProgressIndicator(color: AppTheme.primary),
+              ),
+          barrierDismissible: false,
+        );
+        String email = _emailController.text.trim();
+        String password = _passwordController.text.trim();
+        bool isRegistered = await Firebaseservices().register(
+          email: email,
+          password: password,
+        );
+        if (mounted) {
+          Navigator.pop(context);
+          if (isRegistered) {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('isloggedin', true);
+            Provider.of<DataProvider>(context, listen: false).adduser(email);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MainPage()),
+            );
+            print(Provider.of<DataProvider>(context).users);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Registration failed. Please try again.'),
+              ),
+            );
+          }
+        }
+      } on FirebaseAuthException catch (e) {
+        if (mounted) {
+          Navigator.pop(context);
+          String message;
+          switch (e.code) {
+            case 'email-already-in-use':
+              message = 'This email is already registered.';
+              break;
+            case 'invalid-email':
+              message = 'Invalid email format.';
+              break;
+            case 'weak-password':
+              message = 'Password is too weak.';
+              break;
+            default:
+              message = 'An error occurred. Please try again.';
+          }
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        }
+      } catch (e) {
+        if (mounted) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('An unexpected error occurred.')),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> loginButtonAction() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        showDialog(
+          context: context,
+          builder:
+              (_) => const Center(
+                child: CircularProgressIndicator(color: AppTheme.primary),
+              ),
+          barrierDismissible: false,
+        );
+        String email = _emailController.text.trim();
+        String password = _passwordController.text.trim();
+        bool isLoggedIn = await Firebaseservices().authbyemail(
+          email: email,
+          password: password,
+        );
+        if (mounted) {
+          Navigator.pop(context); // Dismiss loading dialog
+          if (isLoggedIn) {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('isloggedin', true);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MainPage()),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Login failed. Please check your credentials.'),
+              ),
+            );
+          }
+        }
+      } on FirebaseAuthException catch (e) {
+        if (mounted) {
+          Navigator.pop(context);
+          String message;
+          switch (e.code) {
+            case 'user-not-found':
+              message = 'No user found with this email.';
+              break;
+            case 'wrong-password':
+              message = 'Incorrect password.';
+              break;
+            case 'invalid-email':
+              message = 'Invalid email format.';
+              break;
+            default:
+              message = 'An error occurred. Please try again.';
+          }
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        }
+      } catch (e) {
+        if (mounted) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('An unexpected error occurred.')),
+          );
+        }
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(240, 240, 242, 1),
+      backgroundColor: AppTheme.background,
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             height: 150,
-            color: Color.fromRGBO(240, 240, 242, 1),
+            color: AppTheme.background,
             child: Align(
               alignment: Alignment.bottomLeft,
-              child:
-                  widget.isSigned
-                      ? Text(
-                        'Log In',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      )
-                      : Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
+              child: Text(
+                widget.isSigned ? 'Log In' : 'Sign Up',
+                style: const TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
             ),
           ),
           Expanded(
             child: Container(
               width: double.maxFinite,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: Form(
+                    key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Your  Email',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                  SizedBox(height: 3),
-                                  TextField(
-                                    controller: _emailController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Email',
-                                      contentPadding: EdgeInsets.symmetric(
-                                        vertical: 18.0,
-                                        horizontal: 16.0,
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFFD3D3D3),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFF3D5CFF),
-                                          width: 1.5,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                        const Text(
+                          'Your Email',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        const SizedBox(height: 3),
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            hintText: 'Email',
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 18.0,
+                              horizontal: 16.0,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: AppTheme.border,
+                                width: 1,
                               ),
-                              SizedBox(height: 30),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Password',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                  SizedBox(height: 3),
-                                  TextField(
-                                    controller: _passwordController,
-                                    obscureText: _obscureText,
-                                    decoration: InputDecoration(
-                                      hintText: 'Password',
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            vertical: 18.0,
-                                            horizontal: 16.0,
-                                          ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFFD3D3D3),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFF3D5CFF),
-                                          width: 1.5,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          _obscureText
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          color: Colors.grey,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _obscureText = !_obscureText;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: AppTheme.primary,
+                                width: 1.5,
                               ),
-                              SizedBox(height: 30),
-                              FilledButton(
-                                onPressed: () {
-                                  widget.isSigned
-                                      ? loginButtonAction()
-                                      : registerButtonAction();
-                                },
-
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: Color.fromRGBO(
-                                    61,
-                                    92,
-                                    255,
-                                    1,
-                                  ),
-                                  minimumSize: Size(double.infinity, 60),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: BorderSide(
-                                      color: Color.fromRGBO(61, 92, 255, 1),
-                                    ),
-                                  ),
-                                ),
-                                child:
-                                    widget.isSigned
-                                        ? Text('Log In')
-                                        : Text('Sign Up'),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            if (!RegExp(
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                            ).hasMatch(value)) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        const Text('Password', style: TextStyle(fontSize: 15)),
+                        const SizedBox(height: 3),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: _obscureText,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 18.0,
+                              horizontal: 16.0,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: AppTheme.border,
+                                width: 1,
                               ),
-                              Divider(
-                                color: const Color.fromARGB(255, 137, 137, 137),
-                                height: 36,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: AppTheme.primary,
+                                width: 1.5,
                               ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        FilledButton(
+                          onPressed:
                               widget.isSigned
-                                  ? SizedBox(
-                                    width: 60,
-                                    height: 60,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                      onPressed: () {
-                                        signInWithGoogle();
-                                      },
-                                      child: Image.asset(
-                                        'assets/images/google_icon.webp',
-                                      ),
-                                    ),
-                                  )
-                                  : SizedBox.shrink(),
-                            ],
+                                  ? loginButtonAction
+                                  : registerButtonAction,
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppTheme.primary,
+                            minimumSize: const Size(double.infinity, 60),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(widget.isSigned ? 'Log In' : 'Sign Up'),
+                        ),
+                        const SizedBox(height: 18),
+                        const Divider(
+                          color: AppTheme.divider,
+                          height: 18,
+                          thickness: 1,
+                        ),
+                        const SizedBox(height: 18),
+                        Center(
+                          child: SizedBox(
+                            width: 60,
+                            height: 60,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                shape: const CircleBorder(),
+                              ),
+                              onPressed: signInWithGoogle,
+                              child: Image.asset(
+                                'assets/images/google_icon.webp',
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ),

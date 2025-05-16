@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:needai/presentation/screens/auth.dart';
-import 'package:needai/presentation/screens/books.dart';
-import 'package:needai/presentation/screens/courses.dart';
+import 'package:needai/presentation/screens/auth/auth.dart';
+import 'package:needai/presentation/screens/books_page/books.dart';
+import 'package:needai/presentation/screens/courses/courses.dart';
 import 'package:needai/presentation/screens/favourites/favourites.dart';
-import 'package:needai/presentation/screens/firstpage.dart';
+import 'package:needai/presentation/screens/firstpage/firstpage.dart';
+import 'package:needai/presentation/screens/profilepage/profilepage.dart';
+import 'package:needai/providers/data_provider.dart';
 import 'package:needai/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -26,7 +28,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AddToFavourites())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => AddToFavourites()),
+        ChangeNotifierProvider(create: (_) => DataProvider()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
 
@@ -63,8 +68,8 @@ class _MainPageState extends State<MainPage> {
 
     //favourites
     FavoritesPage(),
-
-    Center(child: Text('negr')),
+    //profilepage
+    Profilepage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -75,7 +80,7 @@ class _MainPageState extends State<MainPage> {
         currentIndex: current,
         items: const [
           BottomNavigationBarItem(
-            label: 'Home',
+            label: 'Home2',
             icon: Icon(CupertinoIcons.home, color: Colors.blueAccent),
           ),
           BottomNavigationBarItem(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:needai/data/services/services.dart';
-import 'package:needai/presentation/screens/coursePagedetail.dart';
+import 'package:needai/presentation/screens/courses/coursePagedetail.dart';
 
 class OneCourse extends StatelessWidget {
   static const Map<int, String> _courseImages = {

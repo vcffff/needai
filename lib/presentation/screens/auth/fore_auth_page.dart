@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:needai/presentation/screens/auth/login/log_in.dart';
+import 'package:needai/presentation/themes/colors.dart';
 
 class FirstAuthorizationPage extends StatefulWidget {
   const FirstAuthorizationPage({super.key});
@@ -37,8 +38,8 @@ class _FirstAuthorizationPageState extends State<FirstAuthorizationPage> {
                         );
                       },
                       style: FilledButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(61, 92, 255, 1),
-                        foregroundColor: Colors.white,
+                        backgroundColor: blue,
+                        foregroundColor: lighttext,
                         minimumSize: Size(130, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -64,14 +65,11 @@ class _FirstAuthorizationPageState extends State<FirstAuthorizationPage> {
                       },
                       style: FilledButton.styleFrom(
                         backgroundColor: Colors.white,
-                        foregroundColor: Color.fromRGBO(61, 92, 255, 1),
+                        foregroundColor: maincolor,
                         minimumSize: Size(130, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(
-                            color: Color.fromRGBO(61, 92, 255, 1),
-                            width: 2.0,
-                          ),
+                          side: BorderSide(color: blue, width: 2.0),
                         ),
                       ),
                       child: Text(
