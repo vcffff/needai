@@ -38,19 +38,15 @@ class _typeOfBooksState extends State<typeOfBooks> {
           .doc('typesOfBooks');
       final DocumentSnapshot snapshot = await documentReference.get();
       if (snapshot.exists) {
-    final List<dynamic> typesOfBooks = snapshot['books'];
+    final List<dynamic> typesOfBooks = snapshot.get('types');
     for (var bookType in typesOfBooks) {
-      final String title = bookType[];
+      final String title = bookType;
       print("Title: $title");
-      print("URL: $url");
     }
   } else {
     print("No books found.");
   }
-      void initState() {
-        super.initState();
-        fetchTypes();
-      }
+
     }
 
     return ListView.builder(
